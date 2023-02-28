@@ -13,7 +13,7 @@ from torch import nn
 import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 
-from .DCNv2.dcn_v2 import DCN
+from dcn_v2 import DCN
 
 BN_MOMENTUM = 0.1
 logger = logging.getLogger(__name__)
@@ -305,6 +305,13 @@ class DLA(nn.Module):
         self.load_state_dict(model_weights)
         # self.fc = fc
 
+    def load_pretrained_file(self, load_dir):
+        if os.path.isfile(load_dir):
+            print('Loading weights from: ', load_dir)    
+            model_weights = torch.load(load_dir, map_location=torch.device('cpu'))
+            self.load_state_dict(model_weights['state_dict'], strict=False)
+        else:
+            print('The directory was empty!')
 
 def dla34(pretrained=True, **kwargs):  # DLA-34
     model = DLA([1, 1, 1, 2, 2, 1],
@@ -313,6 +320,24 @@ def dla34(pretrained=True, **kwargs):  # DLA-34
     if pretrained:
         model.load_pretrained_model(data='imagenet', name='dla34', hash='ba72cf86')
     return model
+
+
+def dla34_half(pretrained=True, **kwargs):  # DLA-34 half
+    model = DLA([1, 1, 1, 2, 2, 1],
+                [8, 16, 32, 64, 128, 256],
+                block=BasicBlock, **kwargs)
+    if pretrained:
+        model.load_pretrained_file('../models/dla34_half.pth')
+    return model
+
+def dla34_quarter(pretrained=True, **kwargs):  # DLA-34 quarter
+    model = DLA([1, 1, 1, 2, 2, 1],
+                [4, 8, 16, 32, 64, 128],
+                block=BasicBlock, **kwargs)    
+    if pretrained:
+        model.load_pretrained_file('../models/dla34_quarter.pth')
+    return model
+
 
 class Identity(nn.Module):
 
@@ -491,3 +516,22 @@ def get_pose_net(num_layers, heads, head_conv=256, down_ratio=4):
                  head_conv=head_conv)
   return model
 
+def get_pose_net_quarter(num_layers, heads, head_conv=256, down_ratio=4):
+  model = DLASeg('dla{}_quarter'.format(num_layers), heads,
+                 pretrained=True,
+                 down_ratio=down_ratio,
+                 final_kernel=1,
+                 last_level=5,
+                 head_conv=head_conv)
+  print('Network: dla{}_quarter'.format(num_layers))
+  return model
+
+def get_pose_net_half(num_layers, heads, head_conv=256, down_ratio=4):
+  model = DLASeg('dla{}_half'.format(num_layers), heads,
+                 pretrained=True,
+                 down_ratio=down_ratio,
+                 final_kernel=1,
+                 last_level=5,
+                 head_conv=head_conv)
+  print('Network: dla{}_half'.format(num_layers))
+  return model

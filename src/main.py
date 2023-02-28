@@ -15,6 +15,7 @@ from logger import Logger
 from datasets.dataset_factory import get_dataset
 from trains.train_factory import train_factory
 
+# python main.py ctdet --exp_id coco_half-dla_2x --gpus 2,3 --arch half-dla_34 --batch_size 64 --lr 5e-4 --num_workers 16 --num_epochs 230 --lr_step 180,210
 
 def main(opt):
   torch.manual_seed(opt.seed)
@@ -27,7 +28,8 @@ def main(opt):
 
   os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpus_str
   opt.device = torch.device('cuda' if opt.gpus[0] >= 0 else 'cpu')
-  
+
+
   print('Creating model...')
   model = create_model(opt.arch, opt.heads, opt.head_conv)
   optimizer = torch.optim.Adam(model.parameters(), opt.lr)
@@ -39,7 +41,6 @@ def main(opt):
   Trainer = train_factory[opt.task]
   trainer = Trainer(opt, model, optimizer)
   trainer.set_device(opt.gpus, opt.chunk_sizes, opt.device)
-
   print('Setting up data...')
   val_loader = torch.utils.data.DataLoader(
       Dataset(opt, 'val'), 
@@ -98,5 +99,6 @@ def main(opt):
   logger.close()
 
 if __name__ == '__main__':
+  torch.cuda.set_device(2)
   opt = opts().parse()
   main(opt)

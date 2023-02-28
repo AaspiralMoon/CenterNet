@@ -34,7 +34,7 @@ class opts(object):
                                   'in the exp dir if load_model is empty.') 
 
     # system
-    self.parser.add_argument('--gpus', default='0', 
+    self.parser.add_argument('--gpus', default='2,3', 
                              help='-1 for CPU, use comma for multiple gpus')
     self.parser.add_argument('--num_workers', type=int, default=4,
                              help='dataloader threads. 0 for single-thread.')
@@ -58,10 +58,10 @@ class opts(object):
                              choices=['white', 'black'])
     
     # model
-    self.parser.add_argument('--arch', default='dla_34', 
+    self.parser.add_argument('--arch', default='full-dla_34', 
                              help='model architecture. Currently tested'
                                   'res_18 | res_101 | resdcn_18 | resdcn_101 |'
-                                  'dlav0_34 | dla_34 | hourglass')
+                                  'dlav0_34 | full-dla_34 | half-dla_34 | quarter-dla_34 | hourglass')   # add support for half and quarter dla_34
     self.parser.add_argument('--head_conv', type=int, default=-1,
                              help='conv layer channels for output head'
                                   '0 for no conv layer'
@@ -232,7 +232,7 @@ class opts(object):
 
     opt.gpus_str = opt.gpus
     opt.gpus = [int(gpu) for gpu in opt.gpus.split(',')]
-    opt.gpus = [i for i in range(len(opt.gpus))] if opt.gpus[0] >=0 else [-1]
+    # opt.gpus = [i for i in range(len(opt.gpus))] if opt.gpus[0] >=0 else [-1]
     opt.lr_step = [int(i) for i in opt.lr_step.split(',')]
     opt.test_scales = [float(i) for i in opt.test_scales.split(',')]
 
