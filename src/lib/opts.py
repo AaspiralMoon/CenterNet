@@ -61,7 +61,8 @@ class opts(object):
     self.parser.add_argument('--arch', default='full-dla_34', 
                              help='model architecture. Currently tested'
                                   'res_18 | res_101 | resdcn_18 | resdcn_101 |'
-                                  'dlav0_34 | full-dla_34 | half-dla_34 | quarter-dla_34 | hourglass')   # add support for half and quarter dla_34
+                                  'dlav0_34 | hourglass| full-dla_34 | half-dla_34 | quarter-dla_34 |'
+                                  'full-yolo | half-yolo | quarter-yolo')   # add support for half and quarter dla_34
     self.parser.add_argument('--head_conv', type=int, default=-1,
                              help='conv layer channels for output head'
                                   '0 for no conv layer'

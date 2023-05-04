@@ -2,5 +2,7 @@
 # Author: Renjie Xu
 # Time: 2023/2/24
 
-1. src/lib/models/networks/nepose_dla_dcn.py - get_pose_net_quarter, get_pose_net_half, dla34_half, dla34_quarter, DLA.load_pretrained_file
+1. src/lib/models/networks/pose_dla_dcn.py - get_pose_net_quarter, get_pose_net_half, dla34_half, dla34_quarter, DLA.load_pretrained_file
 2. src/lib/models/model.py
+3. src/lib/models/common.py, yolo.py
+4. src/lib/models/networks/config/*

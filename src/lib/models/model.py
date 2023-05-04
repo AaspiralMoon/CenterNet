@@ -14,6 +14,9 @@ from .networks.pose_dla_dcn import get_pose_net_quarter as get_dla_dcn_quarter
 from .networks.pose_dla_dcn import get_pose_net_half as get_dla_dcn_half
 from .networks.resnet_dcn import get_pose_net as get_pose_net_dcn
 from .networks.large_hourglass import get_large_hourglass_net
+from .yolo import get_pose_net as get_pose_net_yolo
+from .yolo import get_pose_net_half as get_pose_net_yolo_half
+from .yolo import get_pose_net_quarter as get_pose_net_yolo_quarter
 
 _model_factory = {
   'res': get_pose_net, # default Resnet with deconv
@@ -23,6 +26,9 @@ _model_factory = {
   'quarter-dla': get_dla_dcn_quarter,
   'resdcn': get_pose_net_dcn,
   'hourglass': get_large_hourglass_net,
+  'full-yolo': get_pose_net_yolo,
+  'half-yolo': get_pose_net_yolo_half,
+  'quarter-yolo': get_pose_net_yolo_quarter
 }
 
 def create_model(arch, heads, head_conv):
